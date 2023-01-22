@@ -5,8 +5,8 @@ import { generateRangeDatesFromYearStart } from '../utils/generate-range-between
 
 import { HabitDay, DAY_SIZE } from '../components/HabitDay';
 import { Header } from '../components/Header';
-import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
 import { Loading } from '../components/Loading';
 import dayjs from 'dayjs';
 
@@ -31,7 +31,7 @@ export function Home() {
     try {
       setLoading(true)
 
-      const response = await api.get('/summary')
+      const response = await api.get('/summary')      
       setSummary(response.data)
 
     } catch (error) {
@@ -42,9 +42,9 @@ export function Home() {
     }
   }
 
-  useEffect(() => {
+  useEffect(useCallback(() => {
     fetchData()
-  }, [])
+  }, []))
 
   if(loading) {
     return (
@@ -93,6 +93,7 @@ export function Home() {
 
             {amountOfDaysToFill > 0 && Array.from({length: amountOfDaysToFill}).map((_, i) => (
               <View 
+                key={i}
                 className="bg-zinc-900 rounded-lg border-2 m-1 border-zinc-800 opacity-40"
                 style={{ width: DAY_SIZE, height: DAY_SIZE }}
               />
